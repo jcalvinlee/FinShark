@@ -1,11 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace api.Models
+﻿namespace api.Models
 {
+    using System.ComponentModel.DataAnnotations.Schema;
+
     public class Stock
     {
-        private readonly List<Comment> _comments = new List<Comment>();
-
         public int Id { get; set; }
 
         public string Symbol { get; set; }
@@ -22,12 +20,6 @@ namespace api.Models
 
         public long MarketCap { get; set; }
 
-        public List<Comment> Comments
-        {
-            get
-            {
-                return _comments;
-            }
-        }
+        public List<Comment> Comments { get; } = [];
     }
 }

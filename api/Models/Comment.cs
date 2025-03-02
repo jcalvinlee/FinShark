@@ -1,5 +1,8 @@
-﻿namespace api.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace api.Models
 {
+    [Table("Comments")]
     public class Comment
     {
         public Comment()
@@ -15,9 +18,14 @@
 
         public DateTime CreatedOn { get; set; }
 
+        // Foreign key property
         public int? StockId { get; set; }
 
-        // This is a navigation property
+        // Navigation property
         public Stock? Stock { get; set; }
+
+        public string AppUserId { get; set; }
+
+        public AppUser AppUser { get; set; }
     }
 }

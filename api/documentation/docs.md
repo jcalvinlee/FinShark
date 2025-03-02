@@ -16,6 +16,8 @@ dotnet watch run
 dotnet tool install --global dotnet-ef --version 8.0.0 
 dotnet ef migrations add Init
 dotnet ef database update
+
+dotnet ef migrations add Identity
 ```
 
 * Remove Migrations

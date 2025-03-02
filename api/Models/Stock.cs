@@ -2,6 +2,7 @@
 {
     using System.ComponentModel.DataAnnotations.Schema;
 
+    [Table("Stocks")]
     public class Stock
     {
         public int Id { get; set; }
@@ -20,6 +21,9 @@
 
         public long MarketCap { get; set; }
 
+        // Navigation property
         public List<Comment> Comments { get; } = [];
+
+        public List<Portfolio> Portfolios { get; set; }
     }
 }

@@ -7,7 +7,6 @@ using api.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -15,7 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddControllers();
+builder.Services.AddControllers(); // scans the solution for all controllers
 //builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 // Add SwaggerGen
@@ -90,6 +89,8 @@ builder.Services.AddScoped<IStockRepository, StockRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<IPortfolioRepository, PortfolioRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IFMPService, FMPService>();
+builder.Services.AddHttpClient<IFMPService, FMPService>();
 
 var app = builder.Build();
 
@@ -102,6 +103,13 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(x => x
+.AllowAnyMethod()
+.AllowAnyHeader()
+.AllowCredentials()
+//.WithOrigins("https")
+.SetIsOriginAllowed(origin => true));
 
 app.UseAuthentication();
 app.UseAuthorization();

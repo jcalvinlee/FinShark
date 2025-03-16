@@ -1,8 +1,8 @@
 ﻿using api.Data;
+using api.Helpers;
 using api.Interfaces;
 using api.Models;
 
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Repository
@@ -10,6 +10,7 @@ namespace api.Repository
     public class CommentRepository : ICommentRepository
     {
         private readonly ApplicationDBContext _context;
+
         public CommentRepository(ApplicationDBContext context)
         {
             _context = context;
@@ -35,9 +36,25 @@ namespace api.Repository
             return comment;
         }
 
-        public async Task<List<Comment>> GetAllAsync()
+        public async Task<List<Comment>> GetAllAsync(CommentQueryObject queryObject)
         {
-            return await _context.Comments.Include(a => a.AppUser).ToListAsync();
+            IQueryable<Comment> comments = _context.Comments.Include(a => a.AppUser).AsQueryable();
+
+            if (!String.IsNullOrWhiteSpace(queryObject.Symbol))
+            {
+                comments = comments.Where(s => s.Stock.Symbol == queryObject.Symbol);
+            }
+
+            if (queryObject.IsDescending)
+            {
+                comments = comments.OrderByDescending(s => s.CreatedOn);
+            }
+            else
+            {
+                comments = comments.OrderBy(s => s.CreatedOn);
+            }
+
+            return await comments.ToListAsync();
         }
 
         public async Task<Comment?> GetByIdAsync(int id)
